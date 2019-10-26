@@ -24,11 +24,7 @@ func (s *Sheet) SolveSheet() int {
 		grid[i] = make([]int, s.NumCols)
 	}
 
-	//for _, dot := range s.Dots {
 	s.doBleedDarkness(grid)
-	//	fmt.Println("FINISHED DOT")
-	//}
-	//fmt.Println("DONE WITH DOTS")
 
 	total := 0
 	for i := range grid {
@@ -41,61 +37,31 @@ func (s *Sheet) SolveSheet() int {
 }
 
 func (s *Sheet) doBleedDarkness(grid [][]int) {
-	//reset the memo for each dot
-	memo := make([][]bool, s.NumRows)
-	for i := range memo {
-		memo[i] = make([]bool, s.NumCols)
-	}
-
-	for i := range memo {
-		for j := range memo[i] {
-			memo[i][j] = false
-		}
-	}
-
 	for _, dot := range s.Dots {
-		s.bleedDarkness(dot.Row, dot.Col, dot.Darkness, grid, memo)
+		s.bleedDarkness(dot.Row, dot.Col, dot.Darkness, grid)
 		fmt.Println("FINISHED DOT")
 	}
 	fmt.Println("DONE WITH DOTS")
-
-	//s.bleedDarkness(row, col, dark, grid, memo)
 }
 
-func (s *Sheet) bleedDarkness(row int, col int, dark int, grid [][]int, memo [][]bool) {
-	fmt.Printf("row = %d, col = %d, dark = %d\n", row, col, dark)
-
+func (s *Sheet) bleedDarkness(row int, col int, dark int, grid [][]int) {
 	if row < 0 || row >= s.NumRows || col < 0 || col >= s.NumCols {
-		fmt.Printf("OUT OF BOUNDS! Dark is at [%d]\n", dark)
 		//Out of bounds
-		return
-	} else if memo[row][col] {
-		//We've seen this before, but its possible another path could lead to a higher dark value
-		//Make a check and then return
-		if dark > grid[row][col] {
-			fmt.Printf("UPDATE VISITED CELL: [row %d, col %d] dark is now [%d]\n", row, col, dark)
-			grid[row][col] = dark
-		}
 		return
 	} else if grid[row][col] > dark {
 		//Current value > dark, return
-		fmt.Printf("[row %d, col %d] dark [%d] > [%d]\n", row, col, grid[row][col], dark)
-		memo[row][col] = true
 		return
 	} else {
 		//This is a cell to update, update the cell, memo, and then traverse
-		fmt.Printf("UPDATE CELL: [row %d, col %d] dark is now [%d]\n", row, col, dark)
 		grid[row][col] = dark
-		//dark--
-		memo[row][col] = true
 
 		//left
-		s.bleedDarkness(row-1, col, dark-1, grid, memo)
+		s.bleedDarkness(row-1, col, dark-1, grid)
 		//right
-		s.bleedDarkness(row+1, col, dark-1, grid, memo)
+		s.bleedDarkness(row+1, col, dark-1, grid)
 		//up
-		s.bleedDarkness(row, col-1, dark-1, grid, memo)
+		s.bleedDarkness(row, col-1, dark-1, grid)
 		//down
-		s.bleedDarkness(row, col+1, dark-1, grid, memo)
+		s.bleedDarkness(row, col+1, dark-1, grid)
 	}
 }

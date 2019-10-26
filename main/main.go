@@ -6,11 +6,11 @@ import (
 )
 
 func main() {
-	totalRows := 3
-	totalCols := 3
+	totalRows := 5
+	totalCols := 5
 
-	dot1 := dots2.NewDot(0, 0, 15)
-	dot2 := dots2.NewDot(2, 2, 15)
+	dot1 := dots2.NewDot(0, 0, 10)
+	dot2 := dots2.NewDot(3, 4, 10)
 
 	dots := []dots2.Dot{dot1, dot2}
 
